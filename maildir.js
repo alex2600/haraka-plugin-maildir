@@ -21,7 +21,7 @@ exports.hook_queue = function(next, connection) {
     return to.user + '@' + to.host;
   });
 
-  var maildir = new Index(cfg.main, this, connection);
+  var maildir = new Maildir(cfg.main, this, connection);
   var stream = t.message_stream;
 
   // Give the possibility to force the maildir user.
@@ -68,7 +68,7 @@ exports.hook_queue = function(next, connection) {
  * Object for managing maildirs.
  * @param {hash} cfg
  */
-function Index(cfg, plugin, conn) {
+function Maildir(cfg, plugin, conn) {
   this.cfg = cfg;
   this.plugin = plugin;
   this.connection = conn;
@@ -80,7 +80,7 @@ function Index(cfg, plugin, conn) {
  *
  * @return {string}
  */
-Index.prototype.fileName = function() {
+Maildir.prototype.fileName = function() {
   // For filename uniqueness, connection uuid is used.
   var uuid = this.connection.uuid;
   var d = new Date();
@@ -88,7 +88,7 @@ Index.prototype.fileName = function() {
   return name;
 };
 
-Index.prototype.maildir = function(params) {
+Maildir.prototype.maildir = function(params) {
   var self = this;
   var user = params.user;
   var folder = params.folder;
