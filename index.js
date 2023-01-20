@@ -33,7 +33,7 @@ exports.hook_queue = function (next, connection, params) {
    const ws = fs.createWriteStream(tmpFile)
    messageStream.pipe(ws)
 
-   ws.on("error", (err) => plugin.logerror(err.toString()))
+   ws.on("error", (err) => handleError(err, plugin, next))
    ws.on("finish", function () {
       plugin.logdebug("ws.finish: mail written to tmpFile")
 
@@ -41,11 +41,7 @@ exports.hook_queue = function (next, connection, params) {
       return deliverFileToRcpts(filename, tmpFile, trx.rcpt_to, plugin)
          .then(() => plugin.logdebug("done delivering all mails to maildir"))
          .then(() => next(OK))
-         .catch(function (err) {
-            plugin.logerror(err.toString())
-            // DENY if mail could not be delivered
-            return next(DENY, err.toString())
-         })
+         .catch(err => handleError(err, plugin, next))
          .finally(function () {
             ws.close()
             return tryDeleteTmpFile(tmpFile)
@@ -54,6 +50,12 @@ exports.hook_queue = function (next, connection, params) {
 }
 
 /////////////////////////////////////////////////////////////////////////
+
+function handleError (err, plugin, next) {
+   plugin.logerror(err.toString())
+   // DENY if mail could not be delivered
+   return next(DENY, err.toString())
+}
 
 function deliverFileToRcpts (filename, tmpFile, rcpts, plugin) {
    return Promise.all(rcpts.map(rcpt => deliverFileToRcpt(filename, tmpFile, rcpt, plugin)))
