@@ -4,6 +4,8 @@ const path = require("path")
 const util = require("util")
 
 /////////////////////////////////////////////////////////////////////////
+// https://github.com/haraka/Haraka/blob/master/docs/Plugins.md
+/////////////////////////////////////////////////////////////////////////
 
 const copyFileP = util.promisify(fs.copyFile)
 const unlinkFileP = util.promisify(fs.unlink)

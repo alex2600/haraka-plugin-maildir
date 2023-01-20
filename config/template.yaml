@@ -1,0 +1,1 @@
+maildirBaseTemplate: "./data/%u/Maildir" # available variables are: %u=user, %d=domain
