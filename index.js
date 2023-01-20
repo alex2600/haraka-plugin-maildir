@@ -20,14 +20,11 @@ exports.hook_queue = function (next, connection, params) { // connection @see ht
    // logging @see https://haraka.github.io/core/Logging/
    plugin.logdebug("hook queue running for plugin maildir")
 
-   // const conf = plugin.config.get('maildir.yaml')
-   // plugin.loginfo(conf)
-
    // transaction @see https://haraka.github.io/core/Transaction
    const trx = connection.transaction
    const messageStream = trx.message_stream
 
-   // create mailbox filename
+   // create maildir filename
    const filename = `${new Date().valueOf()}.${trx.uuid}.${connection.local.host}`
 
    // create temporary filePath
@@ -43,10 +40,9 @@ exports.hook_queue = function (next, connection, params) { // connection @see ht
    ws.on("finish", function () {
       plugin.logdebug("ws.finish: mail written to tmpFile")
 
-      // deliver file to rcpts
       return deliverFileToRcpts(filename, tmpFile, trx.rcpt_to, plugin)
          .then(() => plugin.logdebug("done delivering all mails to maildir"))
-         .then(() => next(OK, "delivered mail to target maildir"))
+         .then(() => next(OK, "delivered mail to rcpt maildir"))
          .catch(err => handleError(err, plugin, next))
          .finally(function () {
             ws.close()
@@ -72,7 +68,7 @@ function deliverFileToRcpt (filename, tmpFile, rcpt, plugin) {
    const {maildirBaseTemplate} = plugin.config.get('maildir.yaml')
 
    plugin.loginfo(`delivering ${filename} to ${original}`)
-   let maildirBase = maildirBaseTemplate.replaceAll("%u", user).replaceAll("%d", host)
+   const maildirBase = maildirBaseTemplate.replaceAll("%u", user).replaceAll("%d", host)
    const targetPath1 = `${maildirBase}/tmp`
    const targetPath2 = `${maildirBase}/new`
    const targetFile1 = `${targetPath1}/${filename}`
