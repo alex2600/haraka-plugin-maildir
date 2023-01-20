@@ -18,7 +18,7 @@ exports.hook_queue = function (next, connection, params) { // connection @see ht
    const plugin = this
 
    // logging @see https://haraka.github.io/core/Logging/
-   plugin.logdebug("hook queue running for plugin maildir")
+   plugin.loginfo("hook queue running for plugin maildir")
 
    // transaction @see https://haraka.github.io/core/Transaction
    const trx = connection.transaction
