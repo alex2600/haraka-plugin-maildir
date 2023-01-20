@@ -1,0 +1,23 @@
+{
+  "name": "haraka-plugin-maildir",
+  "version": "0.0.1",
+  "description": "Haraka Plugin for delivering mails to Maildir ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alex2600/haraka-plugin-maildir.git"
+  },
+  "keywords": [
+    "haraka",
+    "maildir"
+  ],
+  "author": "alex@gorillaeis.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alex2600/haraka-plugin-maildir/issues"
+  },
+  "homepage": "https://github.com/alex2600/haraka-plugin-maildir#readme"
+}
